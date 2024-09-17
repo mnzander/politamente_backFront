@@ -1048,3 +1048,5 @@ let furnituresDB = [
         img: "/varios/estrella_3d.png"
     }    
 ];
+
+module.exports = furnituresDB;

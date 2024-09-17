@@ -22,9 +22,9 @@ const mueblesSchema = new mongoose.Schema({
     },
     img: {
         type: String,
-        required: true,
+        default: null,
     }
 }, { timestamps: true });
 
-const Muebles = mongoose.model("Muebles", variosSchema, "muebles");
+const Muebles = mongoose.model("Muebles", mueblesSchema, "muebles");
 module.exports = Muebles;

@@ -1,20 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const path = require("path");
 
 const PORT = 9000;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '..', 'src', 'img')));
 
 require("dotenv").config();
 
 const furnitureRouter = require("./routers/furnitureRouter");
 
-//Conexión a MongoDB
+// Connect to MongoDB
 console.log("Connecting to MongoDB with URL:", process.env.DATABASE_URL_DEV);
 mongoose.connect(process.env.DATABASE_URL_DEV);
 const db = mongoose.connection;
