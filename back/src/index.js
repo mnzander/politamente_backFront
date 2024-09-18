@@ -11,6 +11,7 @@ app.use(cors());
 require("dotenv").config();
 
 const furnitureRouter = require("./routers/furnitureRouter");
+const usersRouter = require("./routers/usersRouter");
 
 // Connect to MongoDB
 console.log("Connecting to MongoDB with URL:", process.env.DATABASE_URL_DEV);
@@ -30,6 +31,7 @@ db.on("disconnected", () => {
 });
 
 app.use("/muebles", furnitureRouter);
+app.use("/users", usersRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running: http://localhost:${PORT}`);

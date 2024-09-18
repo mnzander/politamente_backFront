@@ -1,6 +1,8 @@
 const furnituresDB = require("../mocks/furnituresDB");
 const Muebles = require("../models/furnituresModel");
 const fs = require("node:fs");
+const Users = require("../models/usersModel");
+const emailService = require("../services/emailServices");
 
 const loadData = async (req, res) => {
     try{
@@ -24,7 +26,7 @@ const loadData = async (req, res) => {
 const saveImage = (file) => {
     const newPath = `./uploads/${file.originalname}`;
     fs.renameSync(file.path, newPath);
-    return newPath;
+    return { path: newPath, filename: file.originalname };
 }
 
 const createFurniture = async (req, res) => {
@@ -44,10 +46,27 @@ const createFurniture = async (req, res) => {
             measures: newData.measures,
             comment: newData.comment,
             price: newData.price,
-            img: imagePath
+            img: { path: imagePath.path, filename: imagePath.filename }
         });
 
         await newFurniture.save();
+
+        const admin = await Users.findOne({ username: "adminpolitamente" });
+        const subject = `¡Has subido un nuevo mueble, ${admin.username}!`;
+        const html = `
+            <h1> Mueble ${newFurniture.name} creado correctamente</h1>
+            <br />
+            <h2> Aqui tienes los detalles del mueble: </h2>
+            <br />
+            <ul>
+                <li>Tipo: ${newFurniture.type}</li>
+                <li>Medidas: ${newFurniture.measures}</li>
+                <li>Commentario: ${newFurniture.comment}</li>
+                <li>Precio: ${newFurniture.price}</li>
+                <li>Imagen: ¡Revisa los archivos adjuntos!</li>
+            </ul>
+        `;
+        await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
         res.status(201).json({ status: "created", data: newFurniture, error: null });
     } catch(error) {
         res.status(500).json({ status: "error", data: null, error: error.message });
@@ -100,7 +119,7 @@ const updateFurnitureById = async (req, res) => {
             measures: req.body.measures || furniture.measures,
             comment: req.body.comment || furniture.comment,
             price: req.body.price || furniture.price,
-            img: imagePath || furniture.img
+            img: imagePath.path || furniture.img
         };
 
         const updatedFurniture = await Muebles.findByIdAndUpdate(id, newData, { new: true });
@@ -108,6 +127,23 @@ const updateFurnitureById = async (req, res) => {
         if (!updatedFurniture) {
             return res.status(404).json({ status: "error", data: null, error: "Error al actualizar el mueble" });
         }
+
+        const admin = await Users.findOne({ username: "adminpolitamente" });
+        const subject = `¡Has actualizado un mueble, ${admin.username}!`;
+        const html = `
+            <h1> Mueble ${updatedFurniture.name} actualizado correctamente</h1>
+            <br />
+            <h2> Aqui tienes los detalles actualizados del mueble: </h2>
+            <br />
+            <ul>
+                <li>Tipo: ${updatedFurniture.type}</li>
+                <li>Medidas: ${updatedFurniture.measures}</li>
+                <li>Commentario: ${updatedFurniture.comment}</li>
+                <li>Precio: ${updatedFurniture.price}</li>
+                <li>Imagen: ¡Revisa los archivos adjuntos!</li>
+            </ul>
+        `;
+        await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
 
         res.status(200).json({ status: "success", data: updatedFurniture, error: null });
     } catch (error) {
@@ -128,6 +164,11 @@ const deleteFurnitureById = async (req, res) => {
         if (!result) {
             return res.status(404).json({ status: "error", data: null, error: "Mueble no encontrado" });
         }
+
+        const admin = await Users.findOne({ username: "adminpolitamente" });
+        const subject = `¡Has eliminado un mueble, ${admin.username}!`;
+        const html = `<h1> Mueble ${result.name} eliminado correctamente</h1>`;
+        await emailService.sendEmail(admin.email, subject, html);
 
         res.status(200).json({ status: "succeded", data: null, error: null });
 

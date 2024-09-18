@@ -21,7 +21,7 @@ const mueblesSchema = new mongoose.Schema({
         required: true,
     },
     img: {
-        type: String,
+        type: Object,
         default: null,
     }
 }, { timestamps: true });
