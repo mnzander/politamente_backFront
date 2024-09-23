@@ -1,0 +1,52 @@
+html, body {
+    margin: 0;
+    border: 0;
+    font-family: "Space Grotesk", sans-serif;
+    background-image: url(../images/wood.jpeg);
+    background-size:auto;
+    scrollbar-width: thin;
+    scrollbar-color: #114c81 #99c7eb ;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 10vh;
+
+    .products-container, .arcos, .bandejas, .bases, .carros, .cilindros, .cubos, .escaleras, .letras_numeros, .mesas, .paneles, .varios {
+        display: grid;
+        grid-template-columns: 45vh 45vh 45vh;
+        grid-template-rows: 50vh 50vh 50vh;
+        grid-column-gap: 20vh;
+        grid-row-gap: 15vh;
+        justify-items: stretch;
+        align-items: stretch;
+
+        .marco{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #fff;
+            height: 50vh;
+            width: 45vh;
+            padding: 3vh 3vh 0vh 3vh;
+    
+            .photo{
+                width: 100%;
+                height: 100%;
+                background-size: contain;
+                background-position: center;
+                background-repeat:no-repeat;
+            }
+
+            .description{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                font-size: 2.8vh;
+                letter-spacing: 0.2vh;
+                font-weight: bold;
+            }
+        }
+     }
+}

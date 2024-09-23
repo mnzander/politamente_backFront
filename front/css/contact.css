@@ -1,0 +1,82 @@
+html, body {
+    background: linear-gradient(360deg, #114c81 30%, #99c7eb 100%);
+    scrollbar-width: thin;
+    scrollbar-color: #114c81 #99c7eb ;
+}
+
+main {
+    animation: appearFromLeft 1.5s ease-in-out forwards;
+    display: flex;
+    padding: 0vh 15vh;
+    gap: 15vh;
+    color: white;
+    margin-bottom: 5vh;
+
+    .left-container {
+        width: 200vh;
+        
+        h1{
+            font-size: 9vh;
+            color: #ea5040;
+        }
+
+        .description{
+            font-size: 4vh;
+            margin-bottom: 4vh;
+            margin-top: -4vh;
+        }
+
+        .phone, .email {
+
+            .title {
+                margin-bottom: -2vh;
+                font-size: 4vh;
+            }
+
+            .info {
+                font-size: 3vh;
+            }
+        }
+
+    }
+    .pedido {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: black;
+
+        h3 {
+            font-size: 4vh;
+            margin-bottom: 2vh;
+            text-decoration: underline;
+            text-underline-offset: 1.2vh;
+        }
+
+        ul{
+            font-size: 2.5vh;
+        }
+        
+        li {
+            margin-bottom: 3vh;
+        }
+
+        .insta a {
+            display: flex;
+            justify-content: center;
+            font-size: 3vh;
+            gap: 1vh;
+            color: white;
+        }
+    }
+}
+
+@keyframes appearFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

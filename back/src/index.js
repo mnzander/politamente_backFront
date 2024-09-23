@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const PORT = 9000;
 
@@ -29,6 +30,9 @@ db.on("connected", () => {
 db.on("disconnected", () => {
     console.log("MongoDB is disconnected");
 });
+
+app.use(express.static(path.join(__dirname, '../uploads')));
+app.use(express.static(path.join(__dirname, 'img')));
 
 app.use("/muebles", furnitureRouter);
 app.use("/users", usersRouter);

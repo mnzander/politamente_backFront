@@ -1,0 +1,121 @@
+header {
+    height: 20vh;
+    background-color: #114c81;
+    position: sticky;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6vh;
+    opacity: 95%;
+    z-index: 10;
+
+    .logo-btn {
+        position: absolute;
+        left: 10vh;
+        border: none;
+        background-color: transparent;
+
+        .logo {
+            height: 20vh;
+            width: 20vh;
+
+            &:hover{
+                cursor: pointer;
+                height: 18vh;
+                width: 18vh;
+                transition: 0.3s ease;
+            }
+        }
+    }
+
+    .menu {
+        display: flex;
+        gap: 20vh;
+        color: #99c7eb;
+        font-weight: bold;
+        margin-left: 27vh;
+        letter-spacing: 0.1vh;
+        position: relative;
+        z-index: 10;
+        height: 20vh;
+
+        .link {
+            display: flex;
+            align-items: center;
+        }
+
+        .productos-lnk{
+            border: none;
+            background: transparent;
+            color: #99c7eb;
+            font-weight: bold;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 6vh;
+
+            &:hover{
+                color: #ea5040;
+                transition: 0.2s ease-in-out;
+                cursor: pointer;
+            }
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 11.5vh;
+            left: 35vh;
+            width: 28vh;
+            padding-bottom: 4vh;
+            /* list-style: none; */
+            background: linear-gradient(to bottom, rgba(17,76,129,1) 0%, rgb(7, 34, 59) 100%);
+            opacity: 99%;
+            border-radius: 1vh;
+
+            &:hover {
+                display: flex;
+                flex-direction: column;
+                gap: 1vh;
+            }
+
+            li {
+                font-size: 3vh;
+
+                button{
+                    background: transparent;
+                    border: none;
+                    font-size: 3vh;
+                    color: #99c7eb;
+                    font-family: "Space Grotesk", sans-serif;
+                    font-weight: bold;
+
+                    &:hover{
+                        text-decoration: underline;
+                        text-underline-offset: 0.5vh;
+                        cursor: pointer;
+                        color:#ea5040;
+                    }
+                }
+            }
+        }
+
+        .productos:hover + .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1vh;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .link:hover{
+            cursor: pointer;
+            color: #ea5040;
+            text-decoration: underline;
+            text-underline-offset: 2vh;
+            transition: 0.2s ease-in-out;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

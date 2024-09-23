@@ -7,7 +7,7 @@ const mueblesSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["arcos", "bandejas", "bases", "carros", "cilindros", "cubos", "escaleras", "letras/numeros", "mesas", "paneles", "varios"],
+        enum: ["arcos", "bandejas", "bases", "carros", "cilindros", "cubos", "escaleras", "letras_numeros", "mesas", "paneles", "varios"],
         required: true,
     },
     measures: {
