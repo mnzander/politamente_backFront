@@ -1,6 +1,6 @@
 footer {
     display: flex;
-    height: 42vh;
+    height: 50vh;
     background-color: #114c81;
     justify-content: center;
     align-items: center;
@@ -41,15 +41,22 @@ footer {
             }
     
             li {
-                font-size: 2vh;
+                font-size: 2.3vh;
                 color:#99c7eb;
                 letter-spacing: 0.2vh;
                 font-weight: bold;
 
+                &:hover{
+                    color:#ea5040;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    text-underline-offset: 0.3vh;
+                }
+
                 button {
                     background: transparent;
                     border: none;
-                    font-size: 2vh;
+                    font-size: 2.3vh;
                     color:#99c7eb;
                     letter-spacing: 0.2vh;
                     font-weight: bold;
@@ -165,7 +172,7 @@ footer {
                         }
                     }
         
-                    .boton {
+                    .newsletter-btn {
                         background-color: transparent;
                         border: transparent;
                         background-color: #ec3b27;

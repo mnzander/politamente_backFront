@@ -92,9 +92,117 @@ const getFurnitures = async (req, res) => {
                 pages: Math.ceil(totalCount / limit), //Nº de paginas necesarias redondeando hacia arriba
                 currentPage: page //Y el valor de la pagina en la que estamos
             }, 
-        error: null
-    });
+            error: null
+        });
     } catch (error) {
+        res.status(500).json({ status: "error", data: null, error: error.message });
+    }
+};
+
+const getNewestFurnitures = async (req, res) => {
+    try {
+        const { page = 1, limit = 12 } = req.query;
+        
+        const newestFurnitures = await Muebles.find()
+            .sort({ createdAt: -1 }) // Ordena por fecha de creación en orden descendente
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .exec();
+
+        const totalCount = await Muebles.countDocuments();
+        
+        res.status(200).json({
+            status: "succeded",
+            data: newestFurnitures,
+            meta: {
+                total: totalCount,
+                pages: Math.ceil(totalCount / limit),
+                currentPage: page
+            },
+            error: null
+        });
+    } catch (error) {
+        res.status(500).json({ status: "error", data: null, error: error.message });
+    }
+};
+
+const getCheapestFurnitures = async(req, res) => {
+    try{
+        const { page = 1, limit = 12 } = req.query
+
+        const cheapestFurnitures = await Muebles.find()
+            .sort({ price: 1 })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .exec();
+
+            const totalCount = await Muebles.countDocuments();
+
+            res.status(200).json({ 
+                status:"succeded", 
+                data: cheapestFurnitures, 
+                meta: { //Mandamos esta info al front
+                    total: totalCount, //Nº de muebles en la DB
+                    pages: Math.ceil(totalCount / limit), //Nº de paginas necesarias redondeando hacia arriba
+                    currentPage: page //Y el valor de la pagina en la que estamos
+                }, 
+                error: null
+            });
+    } catch(error){
+        res.status(500).json({ status: "error", data: null, error: error.message });
+    }
+}
+
+const getCostlierFurnitures = async(req, res) => {
+    try{
+        const { page = 1, limit = 12 } = req.query
+
+        const cheapestFurnitures = await Muebles.find()
+            .sort({ price: -1 })
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .exec();
+
+            const totalCount = await Muebles.countDocuments();
+
+            res.status(200).json({ 
+                status:"succeded", 
+                data: cheapestFurnitures, 
+                meta: { //Mandamos esta info al front
+                    total: totalCount, //Nº de muebles en la DB
+                    pages: Math.ceil(totalCount / limit), //Nº de paginas necesarias redondeando hacia arriba
+                    currentPage: page //Y el valor de la pagina en la que estamos
+                }, 
+                error: null
+            });
+    } catch(error){
+        res.status(500).json({ status: "error", data: null, error: error.message });
+    }
+}
+
+const getFurnitureFinder = async (req, res) => {
+    try{
+        const { page = 1, limit = 12 } = req.query;
+        const { name } = req.params;
+
+        const filteredFurnitures = await Muebles.find({ name: new RegExp(name, "i") }) //Busca por el valor name sin importarle las mayusculas
+        .limit(limit) //Limita el nº de muebles a 12 por consulta
+        .skip((page - 1) * limit) //Omite el numero de muebles que tiene la pagina anterior a la que estamos.
+        .exec(); //Metodo de mongoose para ejecutar consultas
+
+        const totalCount = await Muebles.countDocuments({ name: new RegExp(name, "i") }); //Cuenta cuantos muebles ahi en la DB
+
+        res.status(200).json({
+            status: "succeded",
+            data: filteredFurnitures,
+            meta: { //Mandamos esta info al front
+                total: totalCount, //Nº de muebles en la DB
+                pages: Math.ceil(totalCount / limit), //Nº de paginas necesarias redondeando hacia arriba
+                currentPage: page //Y el valor de la pagina en la que estamos
+            }, 
+            error: null
+          });
+    } catch(error) {
         res.status(500).json({ status: "error", data: null, error: error.message });
     }
 };
@@ -226,4 +334,4 @@ const deleteFurnitureById = async (req, res) => {
     }
 };
 
-module.exports = { loadData, saveImage, createFurniture, getFurnitures, getFurnituresByType, getFurnituresById, updateFurnitureById, deleteFurnitureById };
+module.exports = { loadData, saveImage, createFurniture, getFurnitures, getFurnitureFinder, getNewestFurnitures, getCheapestFurnitures, getCostlierFurnitures, getFurnituresByType, getFurnituresById, updateFurnitureById, deleteFurnitureById };

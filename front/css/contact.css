@@ -36,6 +36,13 @@ main {
             .info {
                 font-size: 3vh;
             }
+
+            a:hover{
+                color: #e73925;
+                font-weight: bold;
+                text-decoration: underline;
+                transition: 0.2s ease;
+            }
         }
 
     }

@@ -13,6 +13,7 @@ require("dotenv").config();
 
 const furnitureRouter = require("./routers/furnitureRouter");
 const usersRouter = require("./routers/usersRouter");
+const clientRouter = require("./routers/clientRouter")
 
 // Connect to MongoDB
 console.log("Connecting to MongoDB with URL:", process.env.DATABASE_URL_DEV);
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'img')));
 
 app.use("/muebles", furnitureRouter);
 app.use("/users", usersRouter);
+app.use("/clients", clientRouter);
 
 app.listen(PORT, () => {
     console.log(`Server running: http://localhost:${PORT}`);

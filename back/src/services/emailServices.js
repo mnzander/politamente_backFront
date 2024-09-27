@@ -4,21 +4,29 @@ const fs = require("node:fs");
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "ander.munoz.rivas@zabalburu.org",
-        pass: "ogrm mrjh oumq qqjr",
+        user: "admpolitamente@gmail.com",
+        pass: "wvsl gtjg aswb iotq",
     },
 });
 
 const sendEmail = async (to, subject, html) => {
     try{
         const mailOptions = {
-            from: "ander.munoz.rivas@zabalburu.org",
+            from: "admpolitamente@gmail.com",
             to: to,
             subject: subject,
             html: html,
         };
-        await transporter.sendMail(mailOptions);
-        console.log("Se ha enviado correctamente");
+
+        await transporter.sendMail(mailOptions, (err, info) => { 
+            if (err) {
+            console.log ("Error al enviar el correo", err.message); 
+            } 
+            else {
+                console.log("Se ha enviado correctamente", info.response);
+            };
+        });
+
     } catch (error) {
         console.log("No se ha enviado el correo", error);
     }
