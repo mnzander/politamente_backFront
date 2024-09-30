@@ -1,7 +1,7 @@
 html, body {
-    background: linear-gradient(360deg, #99c7eb 0%, #114c81 80%);
-    scrollbar-width: thin;
-    scrollbar-color: #99c7eb #114c81 ;
+  background: linear-gradient(360deg, #99c7eb 0%, #114c81 80%);
+  scrollbar-width: thin;
+  scrollbar-color: #99c7eb #114c81 ;
 }
 
 main {

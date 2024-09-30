@@ -1,0 +1,131 @@
+html, body {
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to top , #99c7eb 0%, #114c81 80%);
+    font-family: "Space Grotesk", sans-serif;
+    scrollbar-width: thin;
+    scrollbar-color: #99c7eb #114c81;
+
+    header {
+        height: 15rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        .logo{
+            position: absolute;
+            width: 12rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding-left: 25rem;
+            padding-right: 25rem;
+
+            button{
+                border: none;
+                background-color: transparent;
+                font-family: "Space Grotesk", sans-serif;
+                font-size: 5rem;
+                font-weight: bold;;
+                color:#99c7eb;
+
+                &:hover{
+                    color: #ea5040;
+                    text-decoration: underline #ea5040;
+                    text-underline-offset: .7rem
+                }
+            };
+        };
+    };
+
+    main {
+        font-family: "Space Grotesk", sans-serif;
+        margin-top: 5rem;
+
+        .product-container {
+            display: flex;
+            flex-direction: column;
+            margin: 2rem 10rem;
+            height: auto;
+
+            .product-row{
+                display: flex;
+                align-items: center;
+                height: 10rem;
+                border-bottom: .2rem solid #114c81;
+
+                &:first-child{
+                    border-top: .2rem solid #114c81;
+                };
+
+                .number, .img, .title, .measures, .comment, .price, .edit, .delete {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                }
+
+                .number{
+                    width: 5rem;
+                    font-size: 2.5rem;
+                    color: #fff;
+                }
+
+                .img {
+                    width: 10rem;
+                };
+
+                .title {
+                    width: 25rem;
+                    font-size: 1.4rem;
+                    font-weight: bold;
+                    color: #fff;
+                }
+
+                .measures {
+                    width: 15rem;
+                    font-size: 1.5rem;
+                    color: #fff;
+                };
+
+                .comment {
+                    width: 25rem;
+                    font-size: 1.5rem;
+                    color: #fff;
+                };
+
+                .price {
+                    width: 10rem;
+                    font-size: 2rem;
+                    color: #fff;
+                };
+
+                .edit, .delete{
+                    width: 5rem;
+                    fill: #fff
+                };
+
+                svg{
+                    height: 2.5rem;
+                    width: 2.5rem;
+                };
+
+                .delete-svg:hover{
+                    fill:#ff1900;
+                    cursor: pointer;
+                };
+
+                .edit-svg:hover{
+                    fill:#ffae00;
+                    cursor: pointer;
+                };
+            };
+        };
+    };
+};

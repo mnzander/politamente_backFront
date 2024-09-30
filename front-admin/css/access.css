@@ -1,0 +1,55 @@
+html, body{
+    background: linear-gradient(to top , #99c7eb 0%, #114c81 70%);
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+#app{
+    background: linear-gradient(to top , #99c7eb 0%, #114c81 70%);
+    font-family: "Space Grotesk", sans-serif;
+}
+
+.col-lg-6 {
+    background: linear-gradient(to top , #99c7eb 0%, #114c81 80%);
+}
+
+.title{
+    font-size: 2rem;
+    color: #99c7eb
+}
+
+#login-btn {
+    background-color: #ea5040;
+    border: none;
+
+    &:hover{
+        background-color: #920f00;
+        font-weight: bold;
+    }
+}
+
+.login-text {
+    font-size: 1rem;
+    color: #99c7eb;
+    font-weight: bold;
+}
+
+.description-title{
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #99c7eb;
+    text-decoration: underline;
+    text-underline-offset: .7rem;
+}
+
+.description{
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: bold;
+}
+
+.gradient-custom-2 {
+    background: linear-gradient(to top , #99c7eb 0%, #114c81 80%);
+}
