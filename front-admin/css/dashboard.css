@@ -3,7 +3,7 @@ html, body {
     border: 0;
     height: 100%;
     width: 100%;
-    background: linear-gradient(to top , #99c7eb 0%, #114c81 80%);
+    background-color: #114c81;
     font-family: "Space Grotesk", sans-serif;
     scrollbar-width: thin;
     scrollbar-color: #99c7eb #114c81;
@@ -47,21 +47,104 @@ html, body {
     main {
         font-family: "Space Grotesk", sans-serif;
         margin-top: 5rem;
+        height: 160rem;
+
+        .delete-alert{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            height: 12rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            background-color: #114c81;
+            color: #fff;
+            border-radius: 2rem;
+            border: .2rem solid #99c7eb;
+            padding: 5rem;
+
+            .delete-confirmation-btns {
+                display: flex;
+                margin-top: 3rem;
+                justify-content: center;
+                gap: 4rem;
+                
+                .delete-yes-btn, .delete-no-btn{
+                    background-color: #ea5040;
+                    font-family: "Space Grotesk", sans-serif;
+                    width: 5rem;
+                    height: 3rem;
+                    border-radius: 2rem;
+                    border: none;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    color: #fff;
+
+                    &:hover{
+                        cursor: pointer;
+                        background-color:#ff1900;
+                        transition: .3s ease;
+                    }
+                }
+            }
+        }
+
+        .search {
+            position: absolute;
+            top: 17rem;
+            left: 85%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 3vh;
+            color: white;
+    
+            .field {
+                padding: 1vh 1.5vh;
+                height: 4vh;
+                width: 100%;
+                background-color: #99c7eb;
+                color: #114c81;
+                font-family: "Space Grotesk", sans-serif;
+                font-size: 2vh;
+                border: none;
+                border-radius: 1vh;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-decoration: underline;
+                text-underline-offset: 0.4vh;
+            }
+    
+            .field:focus {
+                outline: none;
+                border-color: #114c81;
+                font-weight: bold;
+            }
+            
+            .field::placeholder {
+                color: #114c81;
+                font-weight: normal;
+            }
+        };
 
         .product-container {
             display: flex;
             flex-direction: column;
-            margin: 2rem 10rem;
+            margin: 10rem 10rem;
             height: auto;
 
             .product-row{
                 display: flex;
                 align-items: center;
-                height: 10rem;
-                border-bottom: .2rem solid #114c81;
+                height: 12rem;
+                border-bottom: .2rem solid #99c7eb;
 
                 &:first-child{
-                    border-top: .2rem solid #114c81;
+                    border-top: .2rem solid #99c7eb;
                 };
 
                 .number, .img, .title, .measures, .comment, .price, .edit, .delete {
@@ -78,7 +161,13 @@ html, body {
                 }
 
                 .img {
-                    width: 10rem;
+
+                    .imagen{
+                        width: 10rem;
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                    }
                 };
 
                 .title {
@@ -111,6 +200,12 @@ html, body {
                     fill: #fff
                 };
 
+                
+                .delete-btn, .edit-btn{
+                    background-color: transparent;
+                    border: none;
+                }
+
                 svg{
                     height: 2.5rem;
                     width: 2.5rem;
@@ -127,5 +222,64 @@ html, body {
                 };
             };
         };
+
+        .bottom-pagination {
+            position: absolute;
+            top: 175rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 3vh;
+            color: white;
+        }
+        
+        .top-pagination {
+            position: absolute;
+            top: 17rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 3vh;
+            color: white;
+        }
+        
+        .bottom-pagination span, .top-pagination span {
+            font-size: 5vh;
+        }
+        
+        .bottom-pagination button, .top-pagination button {
+            border-radius: 10vh;
+            height: 6vh;
+            width: 12vh;
+            border: none;
+            background-color: #99c7eb;
+            color: #114c81;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 1.8vh;
+            font-weight: bold;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bottom-pagination button:hover, .top-pagination button:hover {
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 0.5vh;
+            font-size: 1.9vh;
+            transition: 0.3s ease;
+            letter-spacing: 0.1vh;
+        }
+        
+        .bottom-pagination button:disabled, .top-pagination button:disabled {
+            border: 1px solid #999999;
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            text-decoration: none;
+            font-size: 1.8vh;
+            letter-spacing: 0vh;
+        }
     };
 };

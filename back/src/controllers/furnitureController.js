@@ -99,6 +99,32 @@ const getFurnitures = async (req, res) => {
     }
 };
 
+const getFurnituresForAdmins = async (req, res) => {
+    try{
+        const { page = 1, limit = 12 } = req.query;
+
+        const allFurnitures = await Muebles.find()
+            .limit(limit) 
+            .skip((page - 1) * limit)
+            .exec();
+
+        const totalCount = await Muebles.countDocuments();
+
+        res.status(200).json({ 
+            status:"succeded", 
+            data: allFurnitures, 
+            meta: {
+                total: totalCount, 
+                pages: Math.ceil(totalCount / limit), 
+                currentPage: page 
+            }, 
+            error: null
+        });
+    } catch (error) {
+        res.status(500).json({ status: "error", data: null, error: error.message });
+    }
+};
+
 const getNewestFurnitures = async (req, res) => {
     try {
         const { page = 1, limit = 12 } = req.query;
@@ -334,4 +360,4 @@ const deleteFurnitureById = async (req, res) => {
     }
 };
 
-module.exports = { loadData, saveImage, createFurniture, getFurnitures, getFurnitureFinder, getNewestFurnitures, getCheapestFurnitures, getCostlierFurnitures, getFurnituresByType, getFurnituresById, updateFurnitureById, deleteFurnitureById };
+module.exports = { loadData, saveImage, createFurniture, getFurnitures, getFurnituresForAdmins, getFurnitureFinder, getNewestFurnitures, getCheapestFurnitures, getCostlierFurnitures, getFurnituresByType, getFurnituresById, updateFurnitureById, deleteFurnitureById };

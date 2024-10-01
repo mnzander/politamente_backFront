@@ -1,6 +1,5 @@
 import { loginUser } from "../api/fetch.js";
 
-
 document.addEventListener('DOMContentLoaded', function() {
     
     const loginBtn = document.getElementById("login-btn");
