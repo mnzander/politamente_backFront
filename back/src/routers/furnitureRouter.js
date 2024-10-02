@@ -1,11 +1,16 @@
 const { loadData, createFurniture, getFurnitures, getFurnituresById, updateFurnitureById, deleteFurnitureById, saveImage, getFurnituresByType, getNewestFurnitures, getCheapestFurnitures, getCostlierFurnitures, getFurnitureFinder, getFurnituresForAdmins,  } = require("../controllers/furnitureController");
-const multer = require("multer");
+
 const { authMiddleware } = require("../middleware/auth");
 
+const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 const router = require("express").Router();
 
+router.post("/images/single", upload.single("img"), (req, res) => {
+    console.log(req.file);
+    res.send("Termina");
+});
 // router.get("/loadData", loadData);
 router.post("/", upload.single("img"), authMiddleware, createFurniture);
 router.get("/", getFurnitures);

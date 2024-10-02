@@ -24,10 +24,14 @@ const loadData = async (req, res) => {
 }
 
 const saveImage = (file) => {
-    const newPath = `./uploads/${file.originalname}`;
-    fs.renameSync(file.path, newPath);
+    if (!file || !file.path || !file.originalname) {
+        throw new Error('No se ha proporcionado una imagen válida');
+    }
+    
+    const newPath = `/uploads/${file.originalname}`; // Usamos originalname aquí
+    fs.renameSync(file.path, `./uploads/${file.originalname}`);
     return { path: newPath, filename: file.originalname };
-}
+};
 
 const createFurniture = async (req, res) => {
     try{
@@ -38,6 +42,10 @@ const createFurniture = async (req, res) => {
             return res.status(400).json({ status: "error", data: null, error: "Todos los campos son obligatorios" });
         }
 
+        if (!imageFile) {
+            return res.status(400).json({ status: "error", data: null, error: "No se ha proporcionado una imagen" });
+        }
+
         const imagePath = saveImage(imageFile);
 
         const newFurniture = await Muebles({
@@ -46,7 +54,7 @@ const createFurniture = async (req, res) => {
             measures: newData.measures,
             comment: newData.comment,
             price: newData.price,
-            img: { path: imagePath.path, filename: imagePath.filename }
+            img: imagePath.path
         });
 
         await newFurniture.save();
@@ -66,6 +74,7 @@ const createFurniture = async (req, res) => {
                 <li>Imagen: ¡Revisa los archivos adjuntos!</li>
             </ul>
         `;
+        console.log(imagePath, imagePath.filename);
         await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
         res.status(201).json({ status: "created", data: newFurniture, error: null });
     } catch(error) {

@@ -15,30 +15,34 @@ html, body {
         align-items: center;
         position: relative;
 
-        .logo{
-            position: absolute;
-            width: 12rem;
-        }
 
         .buttons {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 100%;
-            padding-left: 25rem;
-            padding-right: 25rem;
+            font-size: 5rem;
+            color:#99c7eb;
+            padding: 0 10rem;
+
+            .logo{
+                height: 6.5rem;
+                width: 6rem;
+            };
 
             button{
                 border: none;
                 background-color: transparent;
-                font-family: "Space Grotesk", sans-serif;
-                font-size: 5rem;
-                font-weight: bold;;
-                color:#99c7eb;
 
-                &:hover{
-                    color: #ea5040;
-                    text-decoration: underline #ea5040;
-                    text-underline-offset: .7rem
+                svg{
+                    height: 6.5rem;
+                    width: 4rem;
+                    fill: #99c7eb;
+
+                    &:hover {
+                        fill:#ea5040;
+                        cursor: pointer
+                    }
                 }
             };
         };
@@ -48,6 +52,101 @@ html, body {
         font-family: "Space Grotesk", sans-serif;
         margin-top: 5rem;
         height: 160rem;
+
+        .create-alert, .edit-alert{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 27rem;
+            z-index: 10;
+            font-size: 1.4rem;
+            background-color: #114c81;
+            color: #fff;
+            border-radius: 2rem;
+            border: .2rem solid #99c7eb;
+            padding: 3rem 8rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+            h2{
+                text-decoration: underline;
+                text-underline-offset: .4rem;
+            }
+
+            p{
+                font-style: 1rem;
+                color: #ff5b49;
+                font-weight: bold;
+            }
+            
+            form{
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+
+                label{
+                    display: flex;
+                    align-items: center;
+                    gap: 1vh;
+                }
+                
+                span{
+                    position: relative;
+                    width: 8rem;
+
+                    .mandatory{
+                        position: absolute;
+                        font-size: .75rem;
+
+                    }
+                }
+
+                input, select{
+                    height: 2.4rem;
+                    border-radius: .5rem;
+                    font-size: 1.1rem;
+                    padding: 0 .5em;
+                    border: none;
+                    font-family: "Space Grotesk", sans-serif;
+                };
+
+                .input-create-price, .input-edit-price{
+                    width: 5rem;
+                };
+
+                .input-create-img, .input-edit-img{
+                    height: auto;
+                    width: auto;
+                    font-size: 1rem;
+                    border-radius: 0;
+                }
+            }
+
+            .create-confirmation-btns, .edit-confirmation-btns {
+                display: flex;
+                margin-top: 3rem;
+                justify-content: center;
+                gap: 4rem;
+                
+                .confirm-create-btn, .back-create-btn, .confirm-edit-btn, .back-edit-btn{
+                    background-color: #ea5040;
+                    font-family: "Space Grotesk", sans-serif;
+                    width: 6rem;
+                    height: 3rem;
+                    border-radius: 2rem;
+                    border: none;
+                    font-size: 1.3rem;
+                    font-weight: 450;
+                    color: #fff;
+
+                    &:hover{
+                        cursor: pointer;
+                        background-color:#ff1900;
+                        transition: .3s ease;
+                    };
+                };
+            };
+        };
 
         .delete-alert{
             position: fixed;
@@ -91,6 +190,32 @@ html, body {
                         transition: .3s ease;
                     }
                 }
+            }
+        }
+
+        .create-btn{
+            position: absolute;
+            top: 17rem;
+            left: 27vh;
+            transform: translateX(-50%);
+            height: 7vh;
+            width: 19vh;
+            border-radius: 2rem;
+            border: none;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 2.1vh;
+            font-weight: 450;
+            background-color: #99c7eb;
+            color:#114c81;
+
+            &:hover{
+                cursor: pointer;
+                background-color: #ea5040;
+                color: white;
+                text-decoration: underline;
+                text-underline-offset: .3rem;
+                letter-spacing: .075rem;
+                transition: .3s ease;
             }
         }
 

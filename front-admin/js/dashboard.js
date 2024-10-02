@@ -1,5 +1,5 @@
 import { getFurnitureFinder } from "../../front/api/fetch.js";
-import { getFurnituresForAdmins } from "../api/fetch.js";
+import { createFurniture, getFurnituresForAdmins } from "../api/fetch.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector("header");
     const main = document.querySelector(".main");
     
+    const newFurnitureBtn = document.createElement("button");
+    const newFurnitureAlert = document.querySelector(".create-alert");
+
     const topPaginationContainer = document.createElement("div");
     topPaginationContainer.className = "top-pagination";
 
@@ -20,6 +23,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const bottomPaginationContainer = document.createElement("div");
     bottomPaginationContainer.className = "bottom-pagination";
+
+// DISCONNECT BUTTON - BOTON DE DESCONEXIÓN
+
+    const disconnect = document.querySelector(".disconnect-btn");
+    disconnect.addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "access.html";
+        return;
+    });
+
+//VERIFY TOKEN IN DASHBOARD.HTML - VERIFICAMOS EL TOKEN EN DASHBOARD.HTML
+
+    const verifyToken = () => {
+        const token = localStorage.getItem("token");
+        if (!token || token === null) {
+            document.body.innerHTML = "";
+            window.location.href = "access.html";
+        }
+    };
+
+// LOAD ALL FURNITURES - CARGAMOS TODOS LOS MUEBLES 
 
     const loadFurnitures = async (page = currentPage, limit = 12, filter = currentFilter) => {
         try{
@@ -38,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             showFurnitures(furnitures.data)
+            createNewFurnitureBtn();
             createTopPagination(furnitures.meta, furnitures.data);
             createBottomPagination(furnitures.meta, furnitures.data);
 
@@ -46,37 +71,105 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    const createTopPagination = (meta, furnitures) => {
-        topPaginationContainer.innerHTML = "";
+// CREATE NEW FURNITURE - CREAR UN NUEVO MUEBLE
 
-        const prevButton = document.createElement("button");
-        prevButton.ariaLabel = "Botón de página anterior";
-        prevButton.textContent = "Anterior";
-        prevButton.disabled = meta.currentPage <= 1;
-        prevButton.onclick = () => {
-            loadFurnitures(meta.currentPage - 1, limit);
-            let resta = limit + furnitures.length;
-            number -= resta;
-            window.scrollTo(0, 0);
-        };
-    
-        const currentPageSpan = document.createElement("span");
-        currentPageSpan.textContent = meta.currentPage;
-    
-        const nextButton = document.createElement("button");
-        nextButton.ariaLabel = "Botón de siguiente página";
-        nextButton.textContent = "Siguiente";
-        nextButton.disabled = meta.currentPage >= meta.pages || meta.total <= limit;
-        nextButton.onclick = () => {
-            loadFurnitures(parseInt(meta.currentPage) + 1, limit);
-            window.scrollTo(0, 0);
-        };
-
-        topPaginationContainer.appendChild(prevButton);
-        topPaginationContainer.appendChild(currentPageSpan);
-        topPaginationContainer.appendChild(nextButton);
-        main.appendChild(topPaginationContainer);
+    const createNewFurnitureBtn = () => {
+        newFurnitureBtn.className = "create-btn";
+        newFurnitureBtn.textContent = "Nuevo mueble";
+        main.appendChild(newFurnitureBtn);
     };
+
+    newFurnitureBtn.addEventListener("click", () => {
+        header.style.pointerEvents = "none";
+        header.style.opacity = "0.1";
+        header.style.transition = 'opacity 0.3s ease-in-out';
+        
+        newFurnitureBtn.style.pointerEvents = "none";
+        newFurnitureBtn.style.opacity = "0.1";
+        newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out";
+
+        searchContainer.style.pointerEvents = "none";
+        searchContainer.style.opacity = "0.1";
+        searchContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        topPaginationContainer.style.pointerEvents = "none";
+        topPaginationContainer.style.opacity = "0.1";
+        topPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        bottomPaginationContainer.style.pointerEvents = "none";
+        bottomPaginationContainer.style.opacity = "0.1";
+        bottomPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        productContainer.style.pointerEvents = "none";
+        productContainer.style.opacity = '0.1';
+        productContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        newFurnitureAlert.style.display = "block";
+    });
+
+    const createFurnitureBtnHandler = document.querySelector(".confirm-create-btn");
+    createFurnitureBtnHandler.addEventListener("click", async () => {
+        try{
+            const createName = document.querySelector(".input-create-name").value.trim();
+            const createType = document.querySelector(".select-create-type").value.trim();
+            const createMeasures = document.querySelector(".input-create-measures").value.trim();
+            const createComment = document.querySelector(".input-create-comment").value.trim();
+            const createPrice = document.querySelector(".input-create-price").value.trim();
+            const createImgInput = document.querySelector(".input-create-img"); // Obtienes el elemento input
+            const createImg = createImgInput.files[0]; // Obtiene el primer archivo seleccionado
+
+    
+            if (!createName || !createMeasures || !createPrice) {
+                alert("Por favor, rellena los campos obligatorios");
+                return;
+            } else if (!createType) {
+                alert("Por favor, rellena los campos obligatorios");
+                return;
+            } else if (!createImg) {
+                alert("Por favor, selecciona una imagen para el mueble");
+                return;
+            }else {
+                const newFurniture = await createFurniture(createName, createType, createMeasures, createComment, createPrice, createImg);
+                console.log("Mueble creado con exito:", newFurniture.data);
+                
+            }  
+            
+        } catch(error) {
+            console.error("No se pudo crear el mueble", error);
+            throw error;
+        }
+    });
+
+    const backBtnHandler = document.querySelector(".back-create-btn");
+    backBtnHandler.addEventListener("click", () => {
+        newFurnitureAlert.style.display = "none";
+
+        header.style.pointerEvents = "auto";
+        header.style.opacity = "1";
+        header.style.transition = 'opacity 0.3s ease-in-out';
+
+        newFurnitureBtn.style.pointerEvents = "auto";
+        newFurnitureBtn.style.opacity = "1";
+        newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out"
+        
+        searchContainer.style.pointerEvents = "auto";
+        searchContainer.style.opacity = "1";
+        searchContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        topPaginationContainer.style.pointerEvents = "auto";
+        topPaginationContainer.style.opacity = "1";
+        topPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        bottomPaginationContainer.style.pointerEvents = "auto";
+        bottomPaginationContainer.style.opacity = "1";
+        bottomPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+        productContainer.style.pointerEvents = "auto";
+        productContainer.style.opacity = '1';
+        productContainer.style.transition = 'opacity 0.3s ease-in-out';
+    });
+
+// CREATE SEARCH FIELD - CREAR EL CAMPO DE BUSQUEDA
 
     const createSearchField = () => {    
         const field = document.createElement("input");
@@ -99,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function() {
         searchContainer.appendChild(field);
         main.appendChild(searchContainer);
     };
+
+// SHOW ALL FURNITURES - MOSTRAR TODOS LOS MUEBLES
 
     const showFurnitures = (furnitures) => {
         productContainer.innerHTML = "";
@@ -138,9 +233,88 @@ document.addEventListener('DOMContentLoaded', function() {
             rowPrice.className = "price";
             rowPrice.textContent = `${furniture.price}€`;
 
+            // EDIT - EDITAR
+
             const rowEdit = document.createElement("div");
             rowEdit.className = "edit";
             rowEdit.innerHTML = `<button class="edit-btn"><svg class="edit-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg></button>`;
+
+            const editAlert = document.querySelector(".edit-alert");
+            const editBtn = rowEdit.querySelector(".edit-btn");
+            editBtn.addEventListener("click", () =>{
+                header.style.pointerEvents = "none";
+                header.style.opacity = "0.1";
+                header.style.transition = 'opacity 0.3s ease-in-out';
+
+                newFurnitureBtn.style.pointerEvents = "none";
+                newFurnitureBtn.style.opacity = "0.1";
+                newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out"
+                
+                searchContainer.style.pointerEvents = "none";
+                searchContainer.style.opacity = "0.1";
+                searchContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                topPaginationContainer.style.pointerEvents = "none";
+                topPaginationContainer.style.opacity = "0.1";
+                topPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                bottomPaginationContainer.style.pointerEvents = "none";
+                bottomPaginationContainer.style.opacity = "0.1";
+                bottomPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                productContainer.style.pointerEvents = "none";
+                productContainer.style.opacity = '0.1';
+                productContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                editAlert.style.display = "block";
+                const inputName = document.querySelector(".input-edit-name");
+                const selectType = document.querySelector(".select-edit-type");
+                const inputMeasures = document.querySelector(".input-edit-measures");
+                const inputComment = document.querySelector(".input-edit-comment");
+                const inputPrice = document.querySelector(".input-edit-price");
+
+                inputName.placeholder = `${furniture.name}`;
+                selectType.value = `${furniture.type}`;
+                inputMeasures.placeholder = `${furniture.measures}`;
+                if (furniture.comment === undefined){
+                    inputComment.placeholder = "Agrega un comentario...";
+                } else {
+                    inputComment.placeholder = `${furniture.comment}`;
+                }
+
+                inputPrice.placeholder = `${furniture.price}`;
+            });
+
+            const doNotEdit = document.querySelector(".back-edit-btn");
+            doNotEdit.addEventListener("click", () => {
+                editAlert.style.display = "none";
+
+                header.style.pointerEvents = "auto";
+                header.style.opacity = "1";
+                header.style.transition = 'opacity 0.3s ease-in-out';
+
+                newFurnitureBtn.style.pointerEvents = "auto";
+                newFurnitureBtn.style.opacity = "1";
+                newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out"
+                
+                searchContainer.style.pointerEvents = "auto";
+                searchContainer.style.opacity = "1";
+                searchContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                topPaginationContainer.style.pointerEvents = "auto";
+                topPaginationContainer.style.opacity = "1";
+                topPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                bottomPaginationContainer.style.pointerEvents = "auto";
+                bottomPaginationContainer.style.opacity = "1";
+                bottomPaginationContainer.style.transition = 'opacity 0.3s ease-in-out';
+
+                productContainer.style.pointerEvents = "auto";
+                productContainer.style.opacity = '1';
+                productContainer.style.transition = 'opacity 0.3s ease-in-out';
+            });
+
+            // DELETE - BORRAR
 
             const rowDelete = document.createElement("div");
             rowDelete.className = "delete";
@@ -152,6 +326,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 header.style.pointerEvents = "none";
                 header.style.opacity = "0.1";
                 header.style.transition = 'opacity 0.3s ease-in-out';
+
+                newFurnitureBtn.style.pointerEvents = "none";
+                newFurnitureBtn.style.opacity = "0.1";
+                newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out"
                 
                 searchContainer.style.pointerEvents = "none";
                 searchContainer.style.opacity = "0.1";
@@ -179,6 +357,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 header.style.pointerEvents = "auto";
                 header.style.opacity = "1";
                 header.style.transition = 'opacity 0.3s ease-in-out';
+
+                newFurnitureBtn.style.pointerEvents = "auto";
+                newFurnitureBtn.style.opacity = "1";
+                newFurnitureBtn.style.transition = "opacity 0.3s ease-in-out"
                 
                 searchContainer.style.pointerEvents = "auto";
                 searchContainer.style.opacity = "1";
@@ -197,6 +379,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 productContainer.style.transition = 'opacity 0.3s ease-in-out';
             });
 
+            // APPEND CHILDS
+
             rowImg.append(img);
             productRow.appendChild(rowNumber);
             productRow.appendChild(rowImg);
@@ -210,6 +394,40 @@ document.addEventListener('DOMContentLoaded', function() {
             productContainer.appendChild(productRow);
         });
         main.appendChild(productContainer);
+    };
+
+// CREATE TOP & BOTTON PAGINATION - CREAR LA PAGINACIÓN SUPERIOR E INFERIOR
+
+    const createTopPagination = (meta, furnitures) => {
+        topPaginationContainer.innerHTML = "";
+
+        const prevButton = document.createElement("button");
+        prevButton.ariaLabel = "Botón de página anterior";
+        prevButton.textContent = "Anterior";
+        prevButton.disabled = meta.currentPage <= 1;
+        prevButton.onclick = () => {
+            loadFurnitures(meta.currentPage - 1, limit);
+            let resta = limit + furnitures.length;
+            number -= resta;
+            window.scrollTo(0, 0);
+        };
+
+        const currentPageSpan = document.createElement("span");
+        currentPageSpan.textContent = meta.currentPage;
+
+        const nextButton = document.createElement("button");
+        nextButton.ariaLabel = "Botón de siguiente página";
+        nextButton.textContent = "Siguiente";
+        nextButton.disabled = meta.currentPage >= meta.pages || meta.total <= limit;
+        nextButton.onclick = () => {
+            loadFurnitures(parseInt(meta.currentPage) + 1, limit);
+            window.scrollTo(0, 0);
+        };
+
+        topPaginationContainer.appendChild(prevButton);
+        topPaginationContainer.appendChild(currentPageSpan);
+        topPaginationContainer.appendChild(nextButton);
+        main.appendChild(topPaginationContainer);
     };
 
     const createBottomPagination = (meta, furnitures) => {
@@ -243,6 +461,10 @@ document.addEventListener('DOMContentLoaded', function() {
         bottomPaginationContainer.appendChild(nextBottomButton);
         main.appendChild(bottomPaginationContainer);
     };
+    
+// ALWAYS CHECK IF WE HAVE THE TOKEN AND THEN WE LOAD THE DATA - VERIFICAMOS QUE SIEMPRE HAY TOKEN Y DESPUES CARGAMOS TODO
 
+    verifyToken();
     loadFurnitures(1, limit);
+
 });

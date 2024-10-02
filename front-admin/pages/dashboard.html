@@ -11,15 +11,19 @@
 </head>
 <body>
     <header>
-        <img src="../../front/images/logo.png" alt="logo" class="logo">
         <div class="buttons">
-            <button class="home">crear</button>
-            <button class="disconnect">salir</button>
+            <img src="../../front/images/logo.png" alt="logo" class="logo">
+            <p><b>polita</b>mente</p>
+            <button class="disconnect-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
+            </button>
         </div>
     </header>
     <main class="main">
-        <div class="product-container">
-        </div>
+        <!-- Contenedor de Muebles -->
+        <div class="product-container"></div>
+
+        <!-- Alerta de BORRAR -->
         <div class="delete-alert" style="display: none;">
             <p>¿Estás seguro de que quieres borrar el mueble?<br/>
             Se borrará permanentemente de la base de datos.</p>
@@ -28,6 +32,103 @@
                 <button class="delete-no-btn">No</button>
             </div>
         </div>
+        <!-- Alerta de CREAR -->
+        <div class="create-alert" style="display:none;">
+        <h2>Crea un nuevo mueble:</h2>
+        <form>
+            <label for="name">
+                <span>Nombre: <span class="mandatory">(*)</span></span>
+                <input class="input-create-name" type="text" placeholder="Elige un nombre" name="name">
+            </label>
+            <label for ="type">
+                <span>Tipo: <span class="mandatory">(*)</span></span>
+                <select class="select-create-type" name="select">
+                    <option value="">-- Elige un tipo --</option>
+                    <option value="arcos">arcos</option>
+                    <option value="bandejas">bandejas</option>
+                    <option value="bases">bases</option>
+                    <option value="carros">carros</option>
+                    <option value="cilindros">cilindros</option>
+                    <option value="cubos">cubos</option>
+                    <option value="escaleras">escaleras</option>
+                    <option value="letras_numeros">letras_numeros</option>
+                    <option value="mesas">mesas</option>
+                    <option value="paneles">paneles</option>
+                    <option value="varios">varios</option>
+                    
+                </select>
+            </label>
+            <label for="measures">
+                <span>Medidas: <span class="mandatory">(*)</span></span>
+                <input class="input-create-measures" type="text" placeholder="Medidas del mueble" name="measures">
+            </label>
+            <label for="comment">
+                <span>Comentario: </span>
+                <input class="input-create-comment" type="text"placeholder="Material, luces, forma..." name="comment">
+            </label>
+            <label for="price">
+                <span>Precio: <span class="mandatory">(*)</span></span>
+                <input class="input-create-price" placeholder="Precio" type="number" name="price">
+            </label>
+            <label for="img">
+                <span>Foto: </span>
+                <input class="input-create-img" type="file" accept="image/*" name="img">
+            </label>
+        </form>
+        <p>(*): Campo obligatorio</p>
+        <div class="create-confirmation-btns">
+            <button class="confirm-create-btn">Crear</button>
+            <button class="back-create-btn">Volver</button>
+        </div>
+        </div>
+        <!-- Alerta de EDITAR -->
+        <div class="edit-alert" style="display:none;">
+            <h2>Edita el mueble:</h2>
+            <form>
+                <label for="name">
+                    <span>Nombre: </span>
+                    <input class="input-edit-name" type="text" name="name">
+                </label>
+                <label for ="type">
+                    <span>Tipo: </span>
+                    <select class="select-edit-type" name="select">
+                        <option>-- Cambia el tipo --</option>
+                        <option value="arcos">arcos</option>
+                        <option value="bandejas">bandejas</option>
+                        <option value="bases">bases</option>
+                        <option value="carros">carros</option>
+                        <option value="cilindros">cilindros</option>
+                        <option value="cubos">cubos</option>
+                        <option value="escaleras">escaleras</option>
+                        <option value="letras_numeros">letras_numeros</option>
+                        <option value="mesas">mesas</option>
+                        <option value="paneles">paneles</option>
+                        <option value="varios">varios</option>
+                        
+                    </select>
+                </label>
+                <label for="measures">
+                    <span>Medidas: </span>
+                    <input class="input-edit-measures" type="text" name="measures">
+                </label>
+                <label for="comment">
+                    <span>Comentario: </span>
+                    <input class="input-edit-comment" type="text" name="comment">
+                </label>
+                <label for="price">
+                    <span>Precio: </span>
+                    <input class="input-edit-price" type="number" name="price">
+                </label>
+                <label for="img">
+                    <span>Cambiar Foto: </span>
+                    <input class="input-edit-img" type="file" accept="image/*" name="img">
+                </label>
+            </form>
+            <div class="edit-confirmation-btns">
+                <button class="confirm-edit-btn">Guardar</button>
+                <button class="back-edit-btn">Volver</button>
+            </div>
+            </div>
     </main>
     <script type="module" src="../js/dashboard.js"></script>
 </body>

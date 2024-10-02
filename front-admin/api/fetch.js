@@ -33,3 +33,32 @@ export const getFurnituresForAdmins = async(page = 1, limit = 12) => {
         throw error;
     }
 };
+
+export const createFurniture = async(name, type, measures, comment, price, imgFile) => {
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("Token no encontrado");
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('type', type);
+        formData.append('measures', measures);
+        formData.append('comment', comment);
+        formData.append('price', price.toString());
+        formData.append('img', imgFile);
+
+        const response = await fetch("http://localhost:9000/muebles/", {
+            method: "POST",
+            headers: {
+                "auth": token
+            },
+            body: formData
+        });
+
+        const newFurniture = await response.json();
+        return newFurniture;
+    } catch (error) {
+        console.error("Error creating the furniture:", error);
+        throw error;
+    }
+};

@@ -32,7 +32,7 @@ db.on("disconnected", () => {
     console.log("MongoDB is disconnected");
 });
 
-app.use(express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use(express.static(path.join(__dirname, 'img')));
 
 app.use("/muebles", furnitureRouter);
