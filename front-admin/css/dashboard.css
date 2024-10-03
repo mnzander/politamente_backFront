@@ -41,7 +41,7 @@ html, body {
 
                     &:hover {
                         fill:#ea5040;
-                        cursor: pointer
+                        cursor: pointer;
                     }
                 }
             };

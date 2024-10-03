@@ -7,10 +7,6 @@ const upload = multer({ dest: "uploads/" });
 
 const router = require("express").Router();
 
-router.post("/images/single", upload.single("img"), (req, res) => {
-    console.log(req.file);
-    res.send("Termina");
-});
 // router.get("/loadData", loadData);
 router.post("/", upload.single("img"), authMiddleware, createFurniture);
 router.get("/", getFurnitures);

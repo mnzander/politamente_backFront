@@ -1,6 +1,7 @@
 const furnituresDB = require("../mocks/furnituresDB");
 const Muebles = require("../models/furnituresModel");
 const fs = require("node:fs");
+const path = require('path');
 const Users = require("../models/usersModel");
 const emailService = require("../services/emailServices");
 
@@ -23,14 +24,38 @@ const loadData = async (req, res) => {
     }
 }
 
-const saveImage = (file) => {
-    if (!file || !file.path || !file.originalname) {
-        throw new Error('No se ha proporcionado una imagen válida');
+const saveImage = async (file, type) => {
+    if (!type) {
+        throw new Error('No se ha proporcionado el tipo de mueble');
     }
-    
-    const newPath = `/uploads/${file.originalname}`; // Usamos originalname aquí
-    fs.renameSync(file.path, `./uploads/${file.originalname}`);
-    return { path: newPath, filename: file.originalname };
+
+    let newPath, originalname;
+
+    if (typeof file === 'object' && file.path) {
+        // Si file es un objeto con path, usamos ese path
+        const filePath = file.path;
+        originalname = path.basename(filePath);
+        newPath = `/${type}/${originalname}`;
+    } else {
+        // Si file es un objeto con originalname y path
+        if (!file || !file.originalname || !file.path) {
+            throw new Error('No se ha proporcionado una imagen válida');
+        }
+        originalname = file.originalname;
+        newPath = `/${type}/${originalname}`;
+    }
+
+    const newDir = path.join(__dirname, '..', '..', 'src', 'img', type);
+
+    // Movemos el archivo a la nueva ubicación
+    await fs.promises.rename(
+        typeof file === 'object' && file.path ? file.path : file.originalname,
+        path.join(newDir, originalname)
+    );
+
+    console.log("Ruta de la imagen:", newPath);
+    console.log("Nombre del archivo:", originalname);
+    return { path: newPath, filename: originalname };
 };
 
 const createFurniture = async (req, res) => {
@@ -42,11 +67,17 @@ const createFurniture = async (req, res) => {
             return res.status(400).json({ status: "error", data: null, error: "Todos los campos son obligatorios" });
         }
 
+        if (!newData.comment) {
+            newData.comment =  "Sin comentarios"
+        }
+
         if (!imageFile) {
             return res.status(400).json({ status: "error", data: null, error: "No se ha proporcionado una imagen" });
         }
 
-        const imagePath = saveImage(imageFile);
+        const imagePath = await saveImage(imageFile, newData.type);
+        console.log("Ha llegado la ruta:", imagePath.path);
+        console.log("Ha llegado el nombre:", imagePath.filename);
 
         const newFurniture = await Muebles({
             name: newData.name,
@@ -74,8 +105,13 @@ const createFurniture = async (req, res) => {
                 <li>Imagen: ¡Revisa los archivos adjuntos!</li>
             </ul>
         `;
-        console.log(imagePath, imagePath.filename);
-        await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
+        try{
+            await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
+            console.log("Correo enviado con exito");
+        } catch(error){
+            console.error("Error al enviar el correo", error);
+        }
+
         res.status(201).json({ status: "created", data: newFurniture, error: null });
     } catch(error) {
         res.status(500).json({ status: "error", data: null, error: error.message });
@@ -291,7 +327,6 @@ const getFurnituresById = async (req, res) => {
 const updateFurnitureById = async (req, res) => {
     try {
         const id = req.params.id;
-        const imageFile = req.file;
 
         if (!id) {
             return res.status(400).json({ status: "error", data: null, error: "ID requerido" });
@@ -303,7 +338,38 @@ const updateFurnitureById = async (req, res) => {
             return res.status(404).json({ status: "error", data: null, error: "Mueble no encontrado" });
         }
 
-        const imagePath = saveImage(imageFile);
+        console.log("req.file:", req.file);
+        console.log("req.body:", req.body);
+
+        let imagePath;
+        let hasImageChanged = false;
+
+        // Si se proporcionó un nuevo archivo
+        if (req.file && req.file.path && req.file.path !== furniture.img) {
+            console.log("Cambiamos la imagen");
+
+            // Eliminar la imagen anterior
+            const imageDirectory = path.join(__dirname, '..', 'img');
+            const oldImagePath = path.join(imageDirectory, furniture.img);
+
+            try {
+                await fs.promises.unlink(oldImagePath);
+                console.log(`Imagen anterior eliminada correctamente: ${oldImagePath}`);
+            } catch (error) {
+                console.error(`Error al eliminar la imagen anterior: ${error.message}`);
+            }
+                    
+            imagePath = await saveImage(req.file, req.body.type || furniture.type);
+            hasImageChanged = true;
+        } else {
+            console.log("Procesamos la imagen existente");
+            // Pasamos la ruta actual de la imagen como si fuera un nuevo archivo
+            const currentImagePath = path.join(__dirname, '..', '..', 'src', 'img', furniture.type, path.basename(furniture.img));
+            imagePath = await saveImage({ path: currentImagePath }, req.body.type || furniture.type);
+        }
+
+        console.log("imagePath:", imagePath);
+        console.log("hasImageChanged:", hasImageChanged);
 
         const newData = {
             name: req.body.name || furniture.name,
@@ -311,7 +377,7 @@ const updateFurnitureById = async (req, res) => {
             measures: req.body.measures || furniture.measures,
             comment: req.body.comment || furniture.comment,
             price: req.body.price || furniture.price,
-            img: imagePath.path || furniture.img
+            img: imagePath.path
         };
 
         const updatedFurniture = await Muebles.findByIdAndUpdate(id, newData, { new: true });
@@ -332,10 +398,22 @@ const updateFurnitureById = async (req, res) => {
                 <li>Medidas: ${updatedFurniture.measures}</li>
                 <li>Commentario: ${updatedFurniture.comment}</li>
                 <li>Precio: ${updatedFurniture.price}</li>
-                <li>Imagen: ¡Revisa los archivos adjuntos!</li>
+                <li>Imagen: Si se cambia la imagen, deberia aparecer adjuntada.</li>
             </ul>
         `;
-        await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
+
+        try{
+            if (hasImageChanged) {
+                console.log("Envio el correo con foto");
+                await emailService.sendEmailWithAttachment(admin.email, subject, html, imagePath);
+            } else {
+                console.log("Envio el correo sin foto");
+                await emailService.sendEmail(admin.email, subject, html)
+            }
+            console.log("Correo enviado correctamente");
+        } catch(error){
+            console.error('Error al enviar correo:', error);
+        }
 
         res.status(200).json({ status: "success", data: updatedFurniture, error: null });
     } catch (error) {
@@ -355,6 +433,17 @@ const deleteFurnitureById = async (req, res) => {
 
         if (!result) {
             return res.status(404).json({ status: "error", data: null, error: "Mueble no encontrado" });
+        }
+
+        // Buscar y eliminar la imagen asociada al mueble
+        const imageDirectory = path.join(__dirname, '..', 'img');
+        const imagePath = path.join(imageDirectory, result.img);
+
+        try {
+            await fs.promises.unlink(imagePath);
+            console.log(`Imagen eliminada correctamente: ${imagePath}`);
+        } catch (error) {
+            console.error(`Error al eliminar la imagen: ${error.message}`);
         }
 
         const admin = await Users.findOne({ username: "adminpolitamente" });

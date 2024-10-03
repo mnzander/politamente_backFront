@@ -1,5 +1,5 @@
 import { getFurnitureFinder } from "../../front/api/fetch.js";
-import { createFurniture, getFurnituresForAdmins } from "../api/fetch.js";
+import { createFurniture, deleteFurniture, getFurnituresForAdmins, updateFurniture } from "../api/fetch.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("Por favor, selecciona una imagen para el mueble");
                 return;
             }else {
-                const newFurniture = await createFurniture(createName, createType, createMeasures, createComment, createPrice, createImg);
-                console.log("Mueble creado con exito:", newFurniture.data);
+                await createFurniture(createName, createType, createMeasures, createComment, createPrice, createImg);
+                alert("Mueble creado correctamente...");
                 
             }  
             
@@ -197,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const showFurnitures = (furnitures) => {
         productContainer.innerHTML = "";
+        let productId;
         furnitures.forEach(furniture => {
             const productRow = document.createElement("div");
             productRow.className= "product-row"
@@ -281,9 +282,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     inputComment.placeholder = `${furniture.comment}`;
                 }
-
                 inputPrice.placeholder = `${furniture.price}`;
+
+                productId = furniture._id;
+                const confirmEdit = document.querySelector(".confirm-edit-btn");
+                confirmEdit.addEventListener("click", () => editFurnitureHandler(productId));
             });
+
+            const editFurnitureHandler = async(id) => {
+                try{
+                    //Si los campos no se rellenan, se quedará el valor que ya tenia.
+                    let editName = document.querySelector(".input-edit-name").value.trim() || furniture.name;
+                    let editType = document.querySelector(".select-edit-type").value.trim() || furniture.type;
+                    let editMeasures = document.querySelector(".input-edit-measures").value.trim() || furniture.measures;
+                    let editComment = document.querySelector(".input-edit-comment").value.trim() || furniture.comment || "";
+                    let editPrice = document.querySelector(".input-edit-price").value.trim() || furniture.price;
+                    let editImgInput = document.querySelector(".input-edit-img");
+                    let editImg = editImgInput.files[0] || furniture.img;
+
+                    await updateFurniture(id, editName, editType, editMeasures, editComment, editPrice, editImg);
+                    window.location.reload();
+                    alert("Mueble editado correctamente...");
+
+                } catch(error){
+                    console.error("Error al intentar editar el mueble.", error);
+                    throw error;
+                }
+            };
 
             const doNotEdit = document.querySelector(".back-edit-btn");
             doNotEdit.addEventListener("click", () => {
@@ -348,7 +373,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 productContainer.style.transition = 'opacity 0.3s ease-in-out';
 
                 deleteAlert.style.display = "block";
+                productId = furniture._id;
+
+                const confirmDelete = document.querySelector(".delete-yes-btn");
+                confirmDelete.addEventListener("click", () => deleteFurnitureHandler(productId));
             });
+
+            const deleteFurnitureHandler = async (id) => {
+                try{
+                    await deleteFurniture(id);
+                    window.location.reload();
+                    alert("Mueble eliminado correctamente...");
+                } catch(error){
+                    console.error("Error al intentar borrar el mueble.", error);
+                    throw error;
+                }
+            };
 
             const doNotDelete = document.querySelector(".delete-no-btn");
             doNotDelete.addEventListener("click", () => {

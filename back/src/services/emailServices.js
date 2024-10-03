@@ -34,9 +34,9 @@ const sendEmail = async (to, subject, html) => {
 };
 
 const sendEmailWithAttachment = async (to, subject, html, attachmentPath) => {
-    console.log(attachmentPath.filename, attachmentPath.path);
+    console.log("Estoy en la funcion de envio", attachmentPath.filename, attachmentPath.path);
 
-    const attachmentPathAbsolute = path.join(__dirname, '../../uploads', attachmentPath.filename);
+    const attachmentPathAbsolute = path.join(__dirname, '..', '..', 'src', 'img', attachmentPath.path);
     //Dirname es la ruta completa hasta emailServices.js | Tenemos que volver a back, asique tenemos que salir de services(..) y de src(..)
 
     const attachment = {
