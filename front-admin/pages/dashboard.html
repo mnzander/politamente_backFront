@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Administración de muebles y productos para Politamente">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +15,7 @@
         <div class="buttons">
             <img src="../../front/images/logo.png" alt="logo" class="logo">
             <p><b>polita</b>mente</p>
-            <button class="disconnect-btn">
+            <button aria-label="Desconectar" alt="disconnect-btn" class="disconnect-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
             </button>
         </div>
@@ -28,8 +29,8 @@
             <p>¿Estás seguro de que quieres borrar el mueble?<br/>
             Se borrará permanentemente de la base de datos.</p>
             <div class="delete-confirmation-btns">
-                <button class="delete-yes-btn">Sí</button>
-                <button class="delete-no-btn">No</button>
+                <button aria-label="Confirmar eliminación" alt = "delete-yes-btn" class="delete-yes-btn">Sí</button>
+                <button aria-label="Volver" alt = "delete-no-btn" class="delete-no-btn">No</button>
             </div>
         </div>
         <!-- Alerta de CREAR -->
@@ -77,8 +78,8 @@
         </form>
         <p>(*): Campo obligatorio</p>
         <div class="create-confirmation-btns">
-            <button class="confirm-create-btn">Crear</button>
-            <button class="back-create-btn">Volver</button>
+            <button aria-label="confirmar creación " alt="confirm-create-btn" class="confirm-create-btn">Crear</button>
+            <button aria-label="Volver" alt="back-create-btn" class="back-create-btn">Volver</button>
         </div>
         </div>
         <!-- Alerta de EDITAR -->
@@ -125,8 +126,8 @@
                 </label>
             </form>
             <div class="edit-confirmation-btns">
-                <button class="confirm-edit-btn">Guardar</button>
-                <button class="back-edit-btn">Volver</button>
+                <button aria-label="Confirmar edicion" alt= "confirm-edit-btn" class="confirm-edit-btn">Guardar</button>
+                <button aria-label="Volver" alt= "back-edit-btn" class="back-edit-btn">Volver</button>
             </div>
             </div>
     </main>
