@@ -2,18 +2,20 @@ const nodemailer = require("nodemailer");
 const path = require('path');
 const fs = require("node:fs");
 
+require("dotenv").config();
+
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: process.env.EMAIL_SERVICE,
     auth: {
-        user: "admpolitamente@gmail.com",
-        pass: "wvsl gtjg aswb iotq",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
 });
 
 const sendEmail = async (to, subject, html) => {
     try{
         const mailOptions = {
-            from: "admpolitamente@gmail.com",
+            from: process.env.EMAIL_USER,
             to: to,
             subject: subject,
             html: html,
@@ -46,7 +48,7 @@ const sendEmailWithAttachment = async (to, subject, html, attachmentPath) => {
     };
     
     await transporter.sendMail({
-        from: "ander.munoz.rivas@zabalburu.org",
+        from: process.env.EMAIL_USER,
         to: to,
         subject: subject,
         html: html,
